@@ -22,8 +22,9 @@ their author annotations.** Theorems include proofs checked by Lean.
 | [Abstract](MutualEvaluation/Public/Abstract.lean) | Value envelopes, regret, separability, and committed loss | 13 |
 | [CriticTiming](MutualEvaluation/Public/CriticTiming.lean) | CA/VPP timing, conditional transfer, Boolean objective, and example | 24 |
 | [Replication](MutualEvaluation/Public/Replication.lean) | Validity, Pearson/KL replication payments, information, regret, and single-worker equilibrium | 70 |
+| [Certification](MutualEvaluation/Public/Certification.lean) | Uniform-diagonal semantics and distribution-free confidence bound | 5 |
 
-Import all five modules with:
+Import all six modules with:
 
 ```lean
 import MutualEvaluation
