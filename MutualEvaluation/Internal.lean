@@ -16,4 +16,6 @@ import MutualEvaluation.Internal.Transfer
 import MutualEvaluation.Internal.ReplicationAgreement
 import MutualEvaluation.Internal.ReplicationExamples
 
+import MutualEvaluation.Internal.Certification
+
 /-! INTERNAL build root. Successful compilation is not author annotation. -/
