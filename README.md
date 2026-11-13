@@ -56,22 +56,48 @@ has no explanatory prose or that its prose has no author.
 | Certification | 5 | 0 | 0 | 1 |
 | Total | 35 | 55 | 3 | 8 |
 
-[scripts/annotation_inventory.json](scripts/annotation_inventory.json) tracks
-IDs in source order and unmarked comment counts for every Public module.
-`AUTHOR-PROSE-01` through `AUTHOR-PROSE-16` and `RP-01` through `RP-14`
-retain their existing identities. The five owner-provided Certification
-annotations use `AUTHOR-SPAN CF-01` through `AUTHOR-SPAN CF-05` inside their
-Lean doc comments. Preserve IDs when editing or moving a passage; do not
-renumber existing passages to fill gaps or reuse a retired ID. Update tracking
-explicitly when adding, removing, or moving an annotation.
+[scripts/annotation_inventory.json](scripts/annotation_inventory.json) uses a
+lightweight format inspired by the [W3C Web Annotation Data Model](https://www.w3.org/TR/annotation-model/).
+Each module lists `annotation_ids` (passage identities, not author identities),
+unmarked comment counts, and `annotations` records with four distinct parts:
 
-[scripts/test_annotations.py](scripts/test_annotations.py) contains regression
-tests for the annotation parser, including nested comments and invalid IDs.
+- `id`: the stable passage ID. The 30 existing `AUTHOR-PROSE-01`–`16` and
+  `RP-01`–`14` IDs are retained; Certification adds `CF-01`–`05`.
+- `creator`: Zachary Robertson (`https://github.com/zrobertson466920`), credited
+  separately based on his authorship statement for the 35 marked passages.
+- `body`: a `SpecificResource` selecting the existing prose in its Lean file,
+  using a `TextPositionSelector`. No second copy of the prose is stored.
+- `target`: the containing Public module as a whole. A passage can cover several
+  declarations, so this does not claim a verified declaration-level mapping.
 
-Counts use outer block comments only: nested comments are part of their outer
+Paths resolve from the repository root at the same checkout as the inventory.
+Body offsets are zero-based Unicode code-point positions in UTF-8 source with
+line endings normalized to LF; `start` is inclusive and `end` exclusive. They
+exclude the comment delimiters, passage marker, and surrounding whitespace.
+For example, `CF-02` selects positions `[758, 835)` of
+`MutualEvaluation/Public/Certification.lean`: “For positive m, information when
+X=Y is uniformly distributed over m letters.” Its target is that whole module,
+not a fabricated GitHub declaration anchor.
+
+Preserve IDs when editing or moving passages; do not renumber to fill gaps or
+reuse retired IDs. Update the checked-in records when source movement changes
+positions. Offsets describe the current checkout, not a historical revision;
+no original dates or revision history are asserted. This is ordinary project
+JSON, with local IDs and paths, not a JSON-LD/RDF implementation or a claim of
+full W3C compliance.
+
+[scripts/check_annotations.py](scripts/check_annotations.py) reconstructs records
+from the current source and checks IDs, creator metadata, selectors, counts,
+and declaration/audit coverage. It validates structure and current coverage,
+not historical authorship, verbatim preservation over time, or mathematical
+correctness. Lean separately checks formal types and proofs.
+[scripts/test_annotations.py](scripts/test_annotations.py) tests the parser,
+Unicode positions, and rejection of stale selectors or inconsistent metadata.
+
+Counts use outer block comments only: nested comments belong to their outer
 passage; line comments are excluded. Unmarked `/--` doc comments and `/-!`
-module comments are reported separately from ordinary `/-` blocks. These counts
-do not attribute unmarked prose to the author or certify its meaning.
+module comments are reported separately from ordinary `/-` blocks. The creator
+credit does not extend to those unmarked categories.
 
 ## Build and check
 

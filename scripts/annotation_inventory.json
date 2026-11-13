@@ -1,30 +1,33 @@
 {
   "Core": {
-    "author_ids": [],
+    "annotation_ids": [],
     "unmarked_comments": {
       "block": 5,
       "doc": 0,
       "module": 0
-    }
+    },
+    "annotations": []
   },
   "TwoPairOutcome": {
-    "author_ids": [],
+    "annotation_ids": [],
     "unmarked_comments": {
       "block": 14,
       "doc": 0,
       "module": 0
-    }
+    },
+    "annotations": []
   },
   "Abstract": {
-    "author_ids": [],
+    "annotation_ids": [],
     "unmarked_comments": {
       "block": 7,
       "doc": 3,
       "module": 2
-    }
+    },
+    "annotations": []
   },
   "CriticTiming": {
-    "author_ids": [
+    "annotation_ids": [
       "AUTHOR-PROSE-01",
       "AUTHOR-PROSE-02",
       "AUTHOR-PROSE-03",
@@ -46,10 +49,364 @@
       "block": 1,
       "doc": 0,
       "module": 4
-    }
+    },
+    "annotations": [
+      {
+        "id": "AUTHOR-PROSE-01",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 276,
+            "end": 701
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-02",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 725,
+            "end": 1041
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-03",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1487,
+            "end": 1597
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-04",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1760,
+            "end": 1942
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-05",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 2162,
+            "end": 2511
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-06",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 2923,
+            "end": 2990
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-07",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 3091,
+            "end": 3320
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-08",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 3482,
+            "end": 3655
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-09",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 3679,
+            "end": 3795
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-10",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 4227,
+            "end": 4346
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-11",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 5120,
+            "end": 5223
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-12",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 5247,
+            "end": 5422
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-13",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 5633,
+            "end": 5887
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-14",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 7043,
+            "end": 7321
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-15",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 7748,
+            "end": 7790
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "AUTHOR-PROSE-16",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/CriticTiming.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 8958,
+            "end": 9185
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/CriticTiming.lean",
+          "format": "text/plain"
+        }
+      }
+    ]
   },
   "Replication": {
-    "author_ids": [
+    "annotation_ids": [
       "RP-01",
       "RP-02",
       "RP-03",
@@ -69,10 +426,320 @@
       "block": 28,
       "doc": 0,
       "module": 1
-    }
+    },
+    "annotations": [
+      {
+        "id": "RP-01",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 534,
+            "end": 1231
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-02",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1627,
+            "end": 2379
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-03",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 3290,
+            "end": 4297
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-04",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 5764,
+            "end": 6813
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-05",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 8020,
+            "end": 8408
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-06",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 9214,
+            "end": 9824
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-07",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 10635,
+            "end": 11292
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-08",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 13022,
+            "end": 13478
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-09",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 14543,
+            "end": 15314
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-10",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 18199,
+            "end": 18676
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-11",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 19839,
+            "end": 21022
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-12",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 23500,
+            "end": 24274
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-13",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 26629,
+            "end": 26922
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "RP-14",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Replication.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 28429,
+            "end": 29255
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Replication.lean",
+          "format": "text/plain"
+        }
+      }
+    ]
   },
   "Certification": {
-    "author_ids": [
+    "annotation_ids": [
       "CF-01",
       "CF-02",
       "CF-03",
@@ -83,6 +750,118 @@
       "block": 0,
       "doc": 0,
       "module": 1
-    }
+    },
+    "annotations": [
+      {
+        "id": "CF-01",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Certification.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 218,
+            "end": 472
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Certification.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "CF-02",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Certification.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 758,
+            "end": 835
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Certification.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "CF-03",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Certification.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 942,
+            "end": 1011
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Certification.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "CF-04",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Certification.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1260,
+            "end": 1617
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Certification.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "CF-05",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Certification.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1801,
+            "end": 2466
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Certification.lean",
+          "format": "text/plain"
+        }
+      }
+    ]
   }
 }

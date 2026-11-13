@@ -23,7 +23,7 @@ MODULES = {
 }
 
 
-def uncomment(text, comments=None):
+def uncomment(text, comments=None, spans=None):
     """Remove nested comments; optionally collect outer block comments verbatim."""
     output = []
     i = 0
@@ -44,6 +44,8 @@ def uncomment(text, comments=None):
                     i += 1
             if comments is not None:
                 comments.append(text[start:i])
+            if spans is not None:
+                spans.append((start, i))
             output.append("".join("\n" if c == "\n" else " " for c in text[start:i]))
         elif text.startswith("--", i):
             end = text.find("\n", i)
@@ -141,20 +143,28 @@ def project_import_closure(module):
 AUTHOR = re.compile(r"(AUTHOR-PROSE-\d+|AUTHOR-SPAN [A-Z]+-\d+)\n(.*)", re.S)
 
 
-def annotation_inventory(text):
+CREATOR = {"id": "https://github.com/zrobertson466920",
+           "type": "Person", "name": "Zachary Robertson"}
+
+
+def annotation_inventory(text, source="Example.lean"):
     """Count explicit author markers separately from other documentation.
 
     A doc comment can carry an author marker without losing its Lean doc status.
     Unmarked comments are not evidence of authorship; line comments are excluded.
     """
     comments = []
-    uncomment(text, comments)
+    spans = []
+    uncomment(text, comments, spans)
     ids = []
+    annotations = []
     unmarked = dict(block=0, doc=0, module=0)
-    for comment in comments:
+    for comment, (offset, _) in zip(comments, spans):
         kind = "doc" if comment.startswith("/--") else (
             "module" if comment.startswith("/-!") else "block")
-        body = comment[3 if kind != "block" else 2:-2].strip()
+        opener = 3 if kind != "block" else 2
+        inner = comment[opener:-2]
+        body = inner.strip()
         marker = AUTHOR.fullmatch(body)
         if marker:
             assert kind != "module", "Author marker in module heading"
@@ -162,10 +172,34 @@ def annotation_inventory(text):
             assert uncomment(marker[2]).strip(), (name, "empty annotation")
             assert name not in ids, (name, "duplicate annotation ID")
             ids.append(name)
+            prose = marker[2]
+            start = (offset + opener + len(inner) - len(inner.lstrip())
+                     + marker.start(2) + len(prose) - len(prose.lstrip()))
+            annotations.append({
+                "id": name,
+                "type": "Annotation",
+                "creator": dict(CREATOR),
+                "body": {
+                    "type": "SpecificResource",
+                    "source": source,
+                    "selector": {"type": "TextPositionSelector", "start": start,
+                                 "end": start + len(prose.strip())},
+                },
+                # Conservatively target the containing module, not a guessed declaration.
+                "target": {"id": source, "format": "text/plain"},
+            })
         else:
             assert "AUTHOR-" not in body, "Malformed author annotation marker"
             unmarked[kind] += 1
-    return {"author_ids": ids, "unmarked_comments": unmarked}
+    return {"annotation_ids": ids, "unmarked_comments": unmarked,
+            "annotations": annotations}
+
+
+def validate_annotation_module(text, source, expected):
+    """Check current structure/coverage, not authorship history or prose preservation."""
+    actual = annotation_inventory(text, source)
+    assert actual == expected, (source, "annotation inventory changed", actual)
+    return actual
 
 
 def check_annotation_inventory():
@@ -174,9 +208,10 @@ def check_annotation_inventory():
     counts = {}
     seen = set()
     for module in MODULES:
-        actual = annotation_inventory((PUBLIC / (module + ".lean")).read_text())
-        assert actual == expected[module], (module, "annotation inventory changed", actual)
-        ids = actual["author_ids"]
+        source = f"MutualEvaluation/Public/{module}.lean"
+        actual = validate_annotation_module((ROOT / source).read_text(encoding="utf-8"),
+                                            source, expected[module])
+        ids = actual["annotation_ids"]
         assert not seen.intersection(ids), (module, "annotation ID reused across modules")
         seen.update(ids)
         counts[module] = len(ids)
