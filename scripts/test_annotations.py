@@ -71,6 +71,17 @@ class AnnotationInventoryTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             validate_annotation_module(text, 'Example.lean', stale)
 
+    def test_unknown_module_docs_and_line_comments_stay_unattributed(self):
+        text = ('-- AUTHOR-SPAN CO-99\n'
+                '/- AUTHOR-SPAN AB-08\nConfirmed prose. -/\n'
+                '/-! All-law statements: an unknown creator. -/\n'
+                '/-! Reachable-law statements: an unknown creator. -/\n'
+                '/-- AUTHOR-SPAN AB-11\nConfirmed doc comment. -/')
+        result = annotation_inventory(text)
+        self.assertEqual(result['annotation_ids'], ['AB-08', 'AB-11'])
+        self.assertEqual(result['unmarked_comments'], dict(block=0, doc=0, module=2))
+        self.assertEqual([a['id'] for a in result['annotations']], ['AB-08', 'AB-11'])
+
 
 if __name__ == '__main__':
     unittest.main()
