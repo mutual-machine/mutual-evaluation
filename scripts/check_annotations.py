@@ -7,6 +7,7 @@ Lean checks types and proofs; interface changes still require author review.
 """
 from pathlib import Path
 import re
+import json
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "MutualEvaluation/Public"
@@ -22,8 +23,8 @@ MODULES = {
 }
 
 
-def uncomment(text):
-    """Remove nested comments while preserving line breaks and strings."""
+def uncomment(text, comments=None):
+    """Remove nested comments; optionally collect outer block comments verbatim."""
     output = []
     i = 0
     while i < len(text):
@@ -41,6 +42,8 @@ def uncomment(text):
                     i += 2
                 else:
                     i += 1
+            if comments is not None:
+                comments.append(text[start:i])
             output.append("".join("\n" if c == "\n" else " " for c in text[start:i]))
         elif text.startswith("--", i):
             end = text.find("\n", i)
@@ -134,6 +137,55 @@ def project_import_closure(module):
     return seen
 
 
+# Retain legacy timing IDs and the module-prefixed AUTHOR-SPAN convention.
+AUTHOR = re.compile(r"(AUTHOR-PROSE-\d+|AUTHOR-SPAN [A-Z]+-\d+)\n(.*)", re.S)
+
+
+def annotation_inventory(text):
+    """Count explicit author markers separately from other documentation.
+
+    A doc comment can carry an author marker without losing its Lean doc status.
+    Unmarked comments are not evidence of authorship; line comments are excluded.
+    """
+    comments = []
+    uncomment(text, comments)
+    ids = []
+    unmarked = dict(block=0, doc=0, module=0)
+    for comment in comments:
+        kind = "doc" if comment.startswith("/--") else (
+            "module" if comment.startswith("/-!") else "block")
+        body = comment[3 if kind != "block" else 2:-2].strip()
+        marker = AUTHOR.fullmatch(body)
+        if marker:
+            assert kind != "module", "Author marker in module heading"
+            name = marker[1].removeprefix("AUTHOR-SPAN ")
+            assert uncomment(marker[2]).strip(), (name, "empty annotation")
+            assert name not in ids, (name, "duplicate annotation ID")
+            ids.append(name)
+        else:
+            assert "AUTHOR-" not in body, "Malformed author annotation marker"
+            unmarked[kind] += 1
+    return {"author_ids": ids, "unmarked_comments": unmarked}
+
+
+def check_annotation_inventory():
+    expected = json.loads((ROOT / "scripts/annotation_inventory.json").read_text())
+    assert set(expected) == set(MODULES), "Annotation module inventory changed"
+    counts = {}
+    seen = set()
+    for module in MODULES:
+        actual = annotation_inventory((PUBLIC / (module + ".lean")).read_text())
+        assert actual == expected[module], (module, "annotation inventory changed", actual)
+        ids = actual["author_ids"]
+        assert not seen.intersection(ids), (module, "annotation ID reused across modules")
+        seen.update(ids)
+        counts[module] = len(ids)
+        other = actual["unmarked_comments"]
+        print(f"PASS {module}: {len(ids)} author passages; unmarked comments "
+              f"{other['block']} block, {other['doc']} doc, {other['module']} module.")
+    return counts
+
+
 def check():
     assert project_import_closure("MutualEvaluation.Public.Core") == {
         "MutualEvaluation.Public.Core"
@@ -182,19 +234,12 @@ def check():
     replication = selected["Replication"]
     assert sum(k == "theorem" for k, _, _ in timing) == 9
     assert sum(k == "theorem" for k, _, _ in replication) == 34
-    for module, pattern, expected in [
-        ("CriticTiming", r"/- AUTHOR-PROSE-(\d+)\n(.*?)\n-/",
-         [f"{i:02d}" for i in range(1, 17)]),
-        ("Replication", r"/- AUTHOR-SPAN (RP-\d+)\n(.*?)\n-/",
-         [f"RP-{i:02d}" for i in range(1, 15)]),
-    ]:
-        passages = re.findall(pattern, (PUBLIC / (module + ".lean")).read_text(), re.S)
-        assert [name for name, _ in passages] == expected, (module, "annotation markers")
-        assert all(body.strip() for _, body in passages), (module, "empty annotation")
+    annotation_counts = check_annotation_inventory()
     root_imports = re.findall(
         r"^import (\S+)$", (ROOT / "MutualEvaluation.lean").read_text(), re.M)
     assert root_imports == ["MutualEvaluation.Public." + module for module in MODULES]
-    print(f"PASS {sum(count for count, _ in MODULES.values())} Public declarations; 16 timing and 14 replication annotation passages.")
+    print(f"PASS {sum(count for count, _ in MODULES.values())} Public declarations; "
+          f"{sum(annotation_counts.values())} marked author annotation passages.")
     print("Public Lean sources are authoritative; these checks do not certify author intent.")
 
 

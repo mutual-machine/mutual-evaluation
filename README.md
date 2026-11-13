@@ -39,6 +39,40 @@ Core and the internal replication expression support have no project import path
 through the paper game or its results. The full replication theorem import still
 has paper proof dependencies; this separation concerns shared prerequisites.
 
+## Annotation inventory
+
+The source markers identify 35 author annotation passages. These are counted
+separately from the 134 declarations and from unmarked documentation; a passage
+may describe several declarations. Zero marked passages does not mean a module
+has no explanatory prose or that its prose has no author.
+
+| Module | Marked author passages | Unmarked block comments | Unmarked doc comments | Module comments |
+|---|---:|---:|---:|---:|
+| Core | 0 | 5 | 0 | 0 |
+| TwoPairOutcome | 0 | 14 | 0 | 0 |
+| Abstract | 0 | 7 | 3 | 2 |
+| CriticTiming | 16 | 1 | 0 | 4 |
+| Replication | 14 | 28 | 0 | 1 |
+| Certification | 5 | 0 | 0 | 1 |
+| Total | 35 | 55 | 3 | 8 |
+
+[scripts/annotation_inventory.json](scripts/annotation_inventory.json) tracks
+IDs in source order and unmarked comment counts for every Public module.
+`AUTHOR-PROSE-01` through `AUTHOR-PROSE-16` and `RP-01` through `RP-14`
+retain their existing identities. The five owner-provided Certification
+annotations use `AUTHOR-SPAN CF-01` through `AUTHOR-SPAN CF-05` inside their
+Lean doc comments. Preserve IDs when editing or moving a passage; do not
+renumber existing passages to fill gaps or reuse a retired ID. Update tracking
+explicitly when adding, removing, or moving an annotation.
+
+[scripts/test_annotations.py](scripts/test_annotations.py) contains regression
+tests for the annotation parser, including nested comments and invalid IDs.
+
+Counts use outer block comments only: nested comments are part of their outer
+passage; line comments are excluded. Unmarked `/--` doc comments and `/-!`
+module comments are reported separately from ordinary `/-` blocks. These counts
+do not attribute unmarked prose to the author or certify its meaning.
+
 ## Build and check
 
 Install [Elan](https://github.com/leanprover/elan). The checked-in toolchain and
@@ -61,6 +95,7 @@ Individual checks can be run after building:
 
 ```bash
 python3 scripts/check_annotations.py
+python3 -m unittest discover -s scripts -p 'test_*.py'
 python3 scripts/check_interface.py
 lake env lean -DwarningAsError=true Audit/Abstract.lean
 ```

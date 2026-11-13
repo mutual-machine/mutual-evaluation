@@ -1,0 +1,88 @@
+{
+  "Core": {
+    "author_ids": [],
+    "unmarked_comments": {
+      "block": 5,
+      "doc": 0,
+      "module": 0
+    }
+  },
+  "TwoPairOutcome": {
+    "author_ids": [],
+    "unmarked_comments": {
+      "block": 14,
+      "doc": 0,
+      "module": 0
+    }
+  },
+  "Abstract": {
+    "author_ids": [],
+    "unmarked_comments": {
+      "block": 7,
+      "doc": 3,
+      "module": 2
+    }
+  },
+  "CriticTiming": {
+    "author_ids": [
+      "AUTHOR-PROSE-01",
+      "AUTHOR-PROSE-02",
+      "AUTHOR-PROSE-03",
+      "AUTHOR-PROSE-04",
+      "AUTHOR-PROSE-05",
+      "AUTHOR-PROSE-06",
+      "AUTHOR-PROSE-07",
+      "AUTHOR-PROSE-08",
+      "AUTHOR-PROSE-09",
+      "AUTHOR-PROSE-10",
+      "AUTHOR-PROSE-11",
+      "AUTHOR-PROSE-12",
+      "AUTHOR-PROSE-13",
+      "AUTHOR-PROSE-14",
+      "AUTHOR-PROSE-15",
+      "AUTHOR-PROSE-16"
+    ],
+    "unmarked_comments": {
+      "block": 1,
+      "doc": 0,
+      "module": 4
+    }
+  },
+  "Replication": {
+    "author_ids": [
+      "RP-01",
+      "RP-02",
+      "RP-03",
+      "RP-04",
+      "RP-05",
+      "RP-06",
+      "RP-07",
+      "RP-08",
+      "RP-09",
+      "RP-10",
+      "RP-11",
+      "RP-12",
+      "RP-13",
+      "RP-14"
+    ],
+    "unmarked_comments": {
+      "block": 28,
+      "doc": 0,
+      "module": 1
+    }
+  },
+  "Certification": {
+    "author_ids": [
+      "CF-01",
+      "CF-02",
+      "CF-03",
+      "CF-04",
+      "CF-05"
+    ],
+    "unmarked_comments": {
+      "block": 0,
+      "doc": 0,
+      "module": 1
+    }
+  }
+}
