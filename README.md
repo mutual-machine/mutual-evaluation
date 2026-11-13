@@ -39,6 +39,66 @@ Core and the internal replication expression support have no project import path
 through the paper game or its results. The full replication theorem import still
 has paper proof dependencies; this separation concerns shared prerequisites.
 
+## Annotation inventory
+
+The source markers identify 35 author annotation passages. These are counted
+separately from the 134 declarations and from unmarked documentation; a passage
+may describe several declarations. Zero marked passages does not mean a module
+has no explanatory prose or that its prose has no author.
+
+| Module | Marked author passages | Unmarked block comments | Unmarked doc comments | Module comments |
+|---|---:|---:|---:|---:|
+| Core | 0 | 5 | 0 | 0 |
+| TwoPairOutcome | 0 | 14 | 0 | 0 |
+| Abstract | 0 | 7 | 3 | 2 |
+| CriticTiming | 16 | 1 | 0 | 4 |
+| Replication | 14 | 28 | 0 | 1 |
+| Certification | 5 | 0 | 0 | 1 |
+| Total | 35 | 55 | 3 | 8 |
+
+[scripts/annotation_inventory.json](scripts/annotation_inventory.json) uses a
+lightweight format inspired by the [W3C Web Annotation Data Model](https://www.w3.org/TR/annotation-model/).
+Each module lists `annotation_ids` (passage identities, not author identities),
+unmarked comment counts, and `annotations` records with four distinct parts:
+
+- `id`: the stable passage ID. The 30 existing `AUTHOR-PROSE-01`–`16` and
+  `RP-01`–`14` IDs are retained; Certification adds `CF-01`–`05`.
+- `creator`: Zachary Robertson (`https://github.com/zrobertson466920`), credited
+  separately based on his authorship statement for the 35 marked passages.
+- `body`: a `SpecificResource` selecting the existing prose in its Lean file,
+  using a `TextPositionSelector`. No second copy of the prose is stored.
+- `target`: the containing Public module as a whole. A passage can cover several
+  declarations, so this does not claim a verified declaration-level mapping.
+
+Paths resolve from the repository root at the same checkout as the inventory.
+Body offsets are zero-based Unicode code-point positions in UTF-8 source with
+line endings normalized to LF; `start` is inclusive and `end` exclusive. They
+exclude the comment delimiters, passage marker, and surrounding whitespace.
+For example, `CF-02` selects positions `[758, 835)` of
+`MutualEvaluation/Public/Certification.lean`: “For positive m, information when
+X=Y is uniformly distributed over m letters.” Its target is that whole module,
+not a fabricated GitHub declaration anchor.
+
+Preserve IDs when editing or moving passages; do not renumber to fill gaps or
+reuse retired IDs. Update the checked-in records when source movement changes
+positions. Offsets describe the current checkout, not a historical revision;
+no original dates or revision history are asserted. This is ordinary project
+JSON, with local IDs and paths, not a JSON-LD/RDF implementation or a claim of
+full W3C compliance.
+
+[scripts/check_annotations.py](scripts/check_annotations.py) reconstructs records
+from the current source and checks IDs, creator metadata, selectors, counts,
+and declaration/audit coverage. It validates structure and current coverage,
+not historical authorship, verbatim preservation over time, or mathematical
+correctness. Lean separately checks formal types and proofs.
+[scripts/test_annotations.py](scripts/test_annotations.py) tests the parser,
+Unicode positions, and rejection of stale selectors or inconsistent metadata.
+
+Counts use outer block comments only: nested comments belong to their outer
+passage; line comments are excluded. Unmarked `/--` doc comments and `/-!`
+module comments are reported separately from ordinary `/-` blocks. The creator
+credit does not extend to those unmarked categories.
+
 ## Build and check
 
 Install [Elan](https://github.com/leanprover/elan). The checked-in toolchain and
@@ -61,6 +121,7 @@ Individual checks can be run after building:
 
 ```bash
 python3 scripts/check_annotations.py
+python3 -m unittest discover -s scripts -p 'test_*.py'
 python3 scripts/check_interface.py
 lake env lean -DwarningAsError=true Audit/Abstract.lean
 ```

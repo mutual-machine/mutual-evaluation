@@ -8,7 +8,8 @@ open scoped BigOperators
 open Classical
 namespace MutualEvaluation.Certification
 
-/-- The finite-alphabet f-information functional, comparing the joint law `q`
+/-- AUTHOR-SPAN CF-01
+The finite-alphabet f-information functional, comparing the joint law `q`
 with the product of its marginals.
 When `f` is convex on the nonnegative reals and `f 1 = 0`, this is the
 f-mutual information.
@@ -18,11 +19,13 @@ def fInformation {X Y : Type} [Fintype X] [Fintype Y]
   ∑ xy, ((q.map Prod.fst) xy.1).toReal * ((q.map Prod.snd) xy.2).toReal *
     f ((q xy).toReal / (((q.map Prod.fst) xy.1).toReal * ((q.map Prod.snd) xy.2).toReal))
 
-/-- For positive m, information when X=Y is uniformly distributed over m letters. -/
+/-- AUTHOR-SPAN CF-02
+For positive m, information when X=Y is uniformly distributed over m letters. -/
 def uniformBound (f : ℝ → ℝ) (m : ℕ) : ℝ :=
   f m / m + (1 - 1 / (m : ℝ)) * f 0
 
-/-- The uniform bound equals the f-information of a uniform diagonal law. -/
+/-- AUTHOR-SPAN CF-03
+The uniform bound equals the f-information of a uniform diagonal law. -/
 theorem uniformBound_semantic (f : ℝ → ℝ)
     (m : ℕ) [NeZero m] :
     uniformBound f m =
@@ -31,7 +34,8 @@ theorem uniformBound_semantic (f : ℝ → ℝ)
           (fun x => (x, x))) :=
   Proofs.uniformBound_semantic f m
 
-/-- A sample probability returns a real number.
+/-- AUTHOR-SPAN CF-04
+A sample probability returns a real number.
 The (finite) type A denotes individual sample outcomes where q is the PMF over A.
 The term n indicates the number of independent samples. E is the event; a predicate over sequences of these samples.
 The value is calculated by summing over each possible sample sequence s satisfying E, weighted by its probability. -/
@@ -39,7 +43,8 @@ def sampleProbability {A : Type} [Fintype A] (q : PMF A) (n : ℕ)
     (E : (Fin n → A) → Prop) : ℝ :=
   ∑ s, (∏ i, (q (s i)).toReal) * (if E s then 1 else 0)
 
-/-- Distribution-free certification cannot exceed the uniform bound except at confidence
+/-- AUTHOR-SPAN CF-05
+Distribution-free certification cannot exceed the uniform bound except at confidence
 error plus a collision-probability bound.
 Let L map a sample sequence s to a real value L s.
 Assume that, for every PMF q over X × Y, the probability that L s exceeds
