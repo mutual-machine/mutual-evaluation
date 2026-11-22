@@ -1,4 +1,5 @@
 import Mathlib.Probability.Distributions.Uniform
+import Mathlib.Probability.ProductMeasure
 import MutualEvaluation.Internal.CertificationDPI
 import MutualEvaluation.Internal.CertificationCollision
 
@@ -197,6 +198,55 @@ theorem certification_statement {X Y : Type} [Fintype X] [Fintype Y]
   refine certification_view_statement (m := m) n _ _ L δ ?_ hvalid p
   intro z
   have h := uniform_latent_pmf_bound f hf (fun i => PMF.pure (z i).1) (fun i => PMF.pure (z i).2)
+  simp only [empirical_pair, divergence] at h
+  convert h using 1
+
+open MeasureTheory in
+private theorem finite_product_event {A : Type} [Fintype A]
+    [MeasurableSpace A] [MeasurableSingletonClass A]
+    (q : PMF A) (n : ℕ) (E : (Fin n → A) → Prop) :
+    ((Measure.infinitePi fun _ : Fin n => q.toMeasure) {s | E s}).toReal =
+      ∑ s : Fin n → A, (∏ j, (q (s j)).toReal) * (if E s then 1 else 0) := by
+  let μ := Measure.infinitePi fun _ : Fin n => q.toMeasure
+  change (μ {s | E s}).toReal = _
+  rw [← μ.tsum_indicator_apply_singleton _ MeasurableSet.of_discrete, tsum_fintype,
+    ENNReal.toReal_sum (fun s _ => by simp only [Set.indicator_apply]; split_ifs <;> simp)]
+  apply Finset.sum_congr rfl
+  intro s _
+  simp only [Set.indicator_apply, Set.mem_ofPred_eq]
+  split_ifs <;> simp [μ, ENNReal.toReal_prod,
+    PMF.toMeasure_apply_singleton _ _ (measurableSet_singleton _)]
+
+open MeasureTheory in
+theorem fInformation_view_statement {A X Y V : Type} [Fintype A] [Fintype X] [Fintype Y]
+    [MeasurableSpace A] [MeasurableSingletonClass A] [MeasurableSpace V]
+    {m : ℕ} [NeZero m] (n : ℕ) (pairView : A → X × Y) (view : (Fin n → A) → V)
+    (f : ℝ → ℝ) (hf : ConvexOn ℝ (Set.Ici 0) f) (L : V → ℝ) (δ : ℝ)
+    (hvalid : ∀ q : PMF A,
+      let r := q.map pairView
+      (∑ s : Fin n → A, (∏ j, (q (s j)).toReal) *
+        (if (∑ xy, ((r.map Prod.fst) xy.1).toReal * ((r.map Prod.snd) xy.2).toReal *
+          f ((r xy).toReal / (((r.map Prod.fst) xy.1).toReal * ((r.map Prod.snd) xy.2).toReal)))
+          < L (view s) then 1 else 0)) ≤ δ)
+    (p : PMF A) (μ : Measure V)
+    (hlaw : (Measure.infinitePi fun _ : Fin n => p.toMeasure).map view = μ)
+    (hL : Measurable L) :
+    (μ {v | f m / m + (1 - 1 / (m : ℝ)) * f 0 < L v}).toReal ≤
+      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) := by
+  have hevent : MeasurableSet {v | f m / m + (1 - 1 / (m : ℝ)) * f 0 < L v} :=
+    hL measurableSet_Ioi
+  rw [← hlaw, Measure.map_apply Measurable.of_discrete hevent]
+  change ((Measure.infinitePi fun _ : Fin n => p.toMeasure)
+    {s | f m / m + (1 - 1 / (m : ℝ)) * f 0 < L (view s)}).toReal ≤ _
+  rw [finite_product_event]
+  refine certification_view_statement (m := m) n _ _ (fun s => L (view s)) δ ?_ hvalid p
+  intro z
+  have hmap : (((PMF.uniformOfFintype (Fin m)).map z).map pairView) =
+      (PMF.uniformOfFintype (Fin m)).map (fun i => pairView (z i)) :=
+    PMF.map_comp _ _ _
+  rw [hmap]
+  have h := uniform_latent_pmf_bound f hf
+    (fun i => PMF.pure (pairView (z i)).1) (fun i => PMF.pure (pairView (z i)).2)
   simp only [empirical_pair, divergence] at h
   convert h using 1
 

@@ -66,18 +66,22 @@ theorem distribution_free_certification {X Y : Type} [Fintype X] [Fintype Y]
       δ + (Nat.choose n 2 : ℝ) / (m : ℝ) :=
   Proofs.certification_statement n f hf L δ hvalid p
 
-/-- Transfer a confidence guarantee for a statistic of a sample view.
-The target needs a common upper bound on the laws obtained by sampling
-uniformly from each table of `m` outcomes. The view can combine all `n`
-independent samples, and the collision term counts those source draws. -/
-theorem certification_of_view {A : Type} [Fintype A] {V : Type*}
-    {m : ℕ} [NeZero m] (n : ℕ) (view : (Fin n → A) → V) (L : V → ℝ)
-    (target : PMF A → ℝ) (bound δ : ℝ)
-    (hbound : ∀ z : Fin m → A, target ((PMF.uniformOfFintype (Fin m)).map z) ≤ bound)
-    (hvalid : ∀ q : PMF A, sampleProbability q n (fun s => target q < L (view s)) ≤ δ)
-    (p : PMF A) :
-    sampleProbability p n (fun s => bound < L (view s)) ≤
-      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) :=
-  Proofs.certification_view_statement n target bound (fun s => L (view s)) δ hbound hvalid p
+open MeasureTheory in
+/-- Certify f-information of a pair projection from each independent source draw.
+The pair projection defines the information target. The observation may combine
+the whole sample, and its law is the pushforward of the source product law.
+Validity ranges over all source laws. The collision term counts the independent
+source draws. -/
+theorem certification_of_view {A X Y V : Type} [Fintype A] [Fintype X] [Fintype Y]
+    [MeasurableSpace A] [MeasurableSingletonClass A] [MeasurableSpace V]
+    {m : ℕ} [NeZero m] (n : ℕ) (pairView : A → X × Y) (view : (Fin n → A) → V)
+    (f : ℝ → ℝ) (hf : ConvexOn ℝ (Set.Ici 0) f) (L : V → ℝ) (δ : ℝ)
+    (hvalid : ∀ q : PMF A, sampleProbability q n
+      (fun s => fInformation f (q.map pairView) < L (view s)) ≤ δ)
+    (p : PMF A) (μ : Measure V)
+    (hlaw : (Measure.infinitePi fun _ : Fin n => p.toMeasure).map view = μ)
+    (hL : Measurable L) :
+    (μ {v | uniformBound f m < L v}).toReal ≤ δ + (Nat.choose n 2 : ℝ) / (m : ℝ) :=
+  Proofs.fInformation_view_statement n pairView view f hf L δ hvalid p μ hlaw hL
 
 end MutualEvaluation.Certification
