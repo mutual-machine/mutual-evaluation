@@ -22,7 +22,7 @@ their author annotations.** Theorems include proofs checked by Lean.
 | [Abstract](MutualEvaluation/Public/Abstract.lean) | Value envelopes, regret, separability, and committed loss | 13 |
 | [CriticTiming](MutualEvaluation/Public/CriticTiming.lean) | CA/VPP timing, conditional transfer, Boolean objective, and example | 24 |
 | [Replication](MutualEvaluation/Public/Replication.lean) | Validity, Pearson/KL replication payments, information, regret, and single-worker equilibrium | 70 |
-| [Certification](MutualEvaluation/Public/Certification.lean) | Uniform-diagonal semantics and distribution-free confidence bound | 5 |
+| [Certification](MutualEvaluation/Public/Certification.lean) | Uniform-diagonal semantics and distribution-free confidence bound | 6 |
 
 Import all six modules with:
 
@@ -42,7 +42,7 @@ has paper proof dependencies; this separation concerns shared prerequisites.
 ## Annotation inventory
 
 The source markers identify 64 author annotation passages. These are counted
-separately from the 134 declarations and from unmarked documentation; a passage
+separately from the 135 declarations and from unmarked documentation; a passage
 may describe several declarations. Zero marked passages does not mean a module
 has no explanatory prose or that its prose has no author.
 
@@ -53,8 +53,8 @@ has no explanatory prose or that its prose has no author.
 | Abstract | 10 | 0 | 0 | 2 |
 | CriticTiming | 16 | 1 | 0 | 4 |
 | Replication | 14 | 28 | 0 | 1 |
-| Certification | 5 | 0 | 0 | 1 |
-| Total | 64 | 29 | 0 | 8 |
+| Certification | 5 | 0 | 1 | 1 |
+| Total | 64 | 29 | 1 | 8 |
 
 [scripts/annotation_inventory.json](scripts/annotation_inventory.json) uses a
 lightweight format inspired by the [W3C Web Annotation Data Model](https://www.w3.org/TR/annotation-model/).

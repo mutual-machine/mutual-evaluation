@@ -5,6 +5,7 @@ import MutualEvaluation.Public.Certification
 #print axioms MutualEvaluation.Certification.sampleProbability
 #print axioms MutualEvaluation.Certification.uniformBound_semantic
 #print axioms MutualEvaluation.Certification.distribution_free_certification
+#print axioms MutualEvaluation.Certification.certification_of_view
 
 #print MutualEvaluation.Certification.uniformBound_semantic
 #print MutualEvaluation.Certification.distribution_free_certification

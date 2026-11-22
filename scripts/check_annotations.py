@@ -19,7 +19,7 @@ MODULES = {
     "Abstract": (13, "Abstract"),
     "CriticTiming": (24, "PublicTiming"),
     "Replication": (70, "PublicReplication"),
-    "Certification": (5, "PublicCertification"),
+    "Certification": (6, "PublicCertification"),
 }
 
 

@@ -66,4 +66,23 @@ theorem distribution_free_certification {X Y : Type} [Fintype X] [Fintype Y]
       δ + (Nat.choose n 2 : ℝ) / (m : ℝ) :=
   Proofs.certification_statement n f hf L δ hvalid p
 
+/-- Transfer a confidence guarantee for a statistic of a sample view.
+The target needs a common upper bound on the laws obtained by sampling
+uniformly from each table of `m` outcomes. The view can combine all `n`
+independent samples, and the collision term counts those source draws. -/
+theorem certification_of_view {A : Type} [Fintype A] {V : Type*}
+    {m : ℕ} [NeZero m] (n : ℕ) (view : (Fin n → A) → V) (L : V → ℝ)
+    (target : PMF A → ℝ) (bound δ : ℝ)
+    (hbound : ∀ z : Fin m → A, target ((PMF.uniformOfFintype (Fin m)).map z) ≤ bound)
+    (hvalid : ∀ q : PMF A, sampleProbability q n (fun s => target q < L (view s)) ≤ δ)
+    (p : PMF A) :
+    sampleProbability p n (fun s => bound < L (view s)) ≤
+      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) := by
+  have prob_eq (q : PMF A) (E : (Fin n → A) → Prop) :
+      sampleProbability q n E = Collision.probability (fun a => (q a).toReal) E := by
+    unfold sampleProbability Collision.probability Collision.weight
+    congr!
+  simp_rw [prob_eq] at hvalid ⊢
+  exact Proofs.certification_pmf_bound n target bound (fun s => L (view s)) δ hbound hvalid p
+
 end MutualEvaluation.Certification

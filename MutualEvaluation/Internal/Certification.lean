@@ -122,28 +122,25 @@ theorem uniform_diagonal_pmf {m : ℕ} [NeZero m] (f : ℝ → ℝ) :
   simpa only [PMF.uniformOfFintype_apply, Fintype.card_fin,
     ENNReal.toReal_inv, ENNReal.toReal_natCast] using uniform_diagonal_divergence (m:=m) f
 
-theorem certification_pmf_bound {X Y : Type} [Fintype X] [Fintype Y]
-    {m : ℕ} [NeZero m] (n : ℕ) (f : ℝ → ℝ) (hf : ConvexOn ℝ (Set.Ici 0) f)
-    (L : (Fin n → X × Y) → ℝ) (δ : ℝ)
-    (hvalid : ∀ q : PMF (X × Y), Collision.probability (mass q)
-      (fun s => divergence f (mass q)
-        (fun xy => mass (q.map Prod.fst) xy.1 * mass (q.map Prod.snd) xy.2) < L s) ≤ δ)
-    (p : PMF (X × Y)) :
-    Collision.probability (mass p) (fun s => f m/m + (1-1/(m:ℝ))*f 0 < L s) ≤
-      δ + (Nat.choose n 2 : ℝ)/(m:ℝ) := by
+theorem certification_pmf_bound {A : Type} [Fintype A]
+    {m : ℕ} [NeZero m] (n : ℕ) (target : PMF A → ℝ) (bound : ℝ)
+    (L : (Fin n → A) → ℝ) (δ : ℝ)
+    (hbound : ∀ z : Fin m → A, target ((PMF.uniformOfFintype (Fin m)).map z) ≤ bound)
+    (hvalid : ∀ q : PMF A, Collision.probability (mass q) (fun s => target q < L s) ≤ δ)
+    (p : PMF A) :
+    Collision.probability (mass p) (fun s => bound < L s) ≤
+      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) := by
   apply Collision.finite_confidence_transfer (mass p) (fun _ => ENNReal.toReal_nonneg)
     (mass_sum p) m n (Nat.pos_of_ne_zero (NeZero.ne m)) _ δ
   intro z
   let q := (PMF.uniformOfFintype (Fin m)).map z
-  have hq := uniform_latent_pmf_bound f hf (fun i => PMF.pure (z i).1) (fun i => PMF.pure (z i).2)
-  simp only [empirical_pair] at hq
   have hm : Collision.empirical (m:ℝ)⁻¹ z = mass q := by
     funext a
     exact (empirical_mass z a).symm
   rw [hm]
   apply le_trans (Collision.probability_mono (mass q) (fun _ => ENNReal.toReal_nonneg) _ _ _) (hvalid q)
   intro s hs
-  exact lt_of_le_of_lt hq hs
+  exact lt_of_le_of_lt (hbound z) hs
 
 
 /-- Exact diagonal evaluation oriented for the public semantic identity. -/
@@ -188,7 +185,9 @@ theorem certification_statement {X Y : Type} [Fintype X] [Fintype Y]
     have hh := hvalid q
     simp only [Collision.probability, Collision.weight, divergence] at hh ⊢
     convert hh using 1; congr!
-  have hh := certification_pmf_bound (m := m) n f hf L δ hv p
+  have hh := certification_pmf_bound (m := m) n _ _ L δ (fun z => by
+    simpa only [empirical_pair] using
+      uniform_latent_pmf_bound f hf (fun i => PMF.pure (z i).1) (fun i => PMF.pure (z i).2)) hv p
   simp only [Collision.probability, Collision.weight] at hh ⊢
   convert hh using 1; congr!
 
