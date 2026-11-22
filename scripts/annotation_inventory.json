@@ -6,12 +6,14 @@
       "CO-03",
       "CO-04",
       "CO-05",
+      "CO-06",
       "TP-05",
-      "TP-06"
+      "TP-06",
+      "CO-07"
     ],
     "unmarked_comments": {
       "block": 0,
-      "doc": 4,
+      "doc": 0,
       "module": 0
     },
     "annotations": [
@@ -126,6 +128,28 @@
         }
       },
       {
+        "id": "CO-06",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Core.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 1201,
+            "end": 1420
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Core.lean",
+          "format": "text/plain"
+        }
+      },
+      {
         "id": "TP-05",
         "type": "Annotation",
         "creator": {
@@ -138,8 +162,8 @@
           "source": "MutualEvaluation/Public/Core.lean",
           "selector": {
             "type": "TextPositionSelector",
-            "start": 1450,
-            "end": 1711
+            "start": 1590,
+            "end": 1851
           }
         },
         "target": {
@@ -160,8 +184,30 @@
           "source": "MutualEvaluation/Public/Core.lean",
           "selector": {
             "type": "TextPositionSelector",
-            "start": 2012,
-            "end": 2070
+            "start": 2106,
+            "end": 2164
+          }
+        },
+        "target": {
+          "id": "MutualEvaluation/Public/Core.lean",
+          "format": "text/plain"
+        }
+      },
+      {
+        "id": "CO-07",
+        "type": "Annotation",
+        "creator": {
+          "id": "https://github.com/zrobertson466920",
+          "type": "Person",
+          "name": "Zachary Robertson"
+        },
+        "body": {
+          "type": "SpecificResource",
+          "source": "MutualEvaluation/Public/Core.lean",
+          "selector": {
+            "type": "TextPositionSelector",
+            "start": 2544,
+            "end": 2857
           }
         },
         "target": {

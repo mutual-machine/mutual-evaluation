@@ -41,20 +41,20 @@ has paper proof dependencies; this separation concerns shared prerequisites.
 
 ## Annotation inventory
 
-The source markers identify 64 author annotation passages. These are counted
+The source markers identify 66 author annotation passages. These are counted
 separately from the 141 declarations and from unmarked documentation; a passage
 may describe several declarations. Zero marked passages does not mean a module
 has no explanatory prose or that its prose has no author.
 
 | Module | Marked author passages | Unmarked block comments | Unmarked doc comments | Module comments |
 |---|---:|---:|---:|---:|
-| Core | 7 | 0 | 4 | 0 |
+| Core | 9 | 0 | 0 | 0 |
 | TwoPairOutcome | 12 | 0 | 0 | 0 |
 | Abstract | 10 | 0 | 0 | 2 |
 | CriticTiming | 16 | 1 | 0 | 4 |
 | Replication | 14 | 28 | 0 | 1 |
 | Certification | 5 | 0 | 0 | 1 |
-| Total | 64 | 29 | 4 | 8 |
+| Total | 66 | 29 | 0 | 8 |
 
 [scripts/annotation_inventory.json](scripts/annotation_inventory.json) uses a
 lightweight format inspired by the [W3C Web Annotation Data Model](https://www.w3.org/TR/annotation-model/).
@@ -63,11 +63,11 @@ unmarked comment counts, and `annotations` records with four distinct parts:
 
 - `id`: the stable passage ID. The 30 existing `AUTHOR-PROSE-01`–`16` and
   `RP-01`–`14` IDs and Certification’s `CF-01`–`05` are retained.
-  Newly confirmed passages use `CO-01`–`05` (Core), `TP-01`–`14`
+  Newly confirmed passages use `CO-01`–`07` (Core), `TP-01`–`14`
   (TwoPairOutcome, with `TP-05` and `TP-06` now in Core), and `AB-01`–`08`,
   `AB-11`–`12` (Abstract).
 - `creator`: Zachary Robertson (`https://github.com/zrobertson466920`), credited
-  separately based on his authorship statement for the 64 marked passages.
+  separately based on his authorship statement for the 66 marked passages.
 - `body`: a `SpecificResource` selecting the existing prose in its Lean file,
   using a `TextPositionSelector`. No second copy of the prose is stored.
 - `target`: the containing Public module as a whole. A passage can cover several
@@ -102,9 +102,9 @@ passage; line comments are excluded. Unmarked `/--` doc comments and `/-!`
 module comments are reported separately from ordinary `/-` blocks. The creator
 credit does not extend to those unmarked categories.
 
-Zachary confirmed all five Core blocks, all fourteen TwoPairOutcome blocks,
-and Abstract blocks A1–A8 and A11–A12. The `AB` suffixes preserve those original
-Abstract block ordinals. The two remaining Abstract blocks, “All-law statements”
+Zachary confirmed Core passages `CO-01`–`07`, TwoPairOutcome passages
+`TP-01`–`14`, and Abstract blocks A1–A8 and A11–A12. The `AB` suffixes preserve
+those original Abstract block ordinals. The two remaining Abstract blocks, “All-law statements”
 and “Reachable-law statements” (A9 and A10), retain unknown creators; unknown
 does not mean machine-generated. Their `/-!` syntax denotes Lean module
 documentation, not authorship. They remain unmarked and have no creator records.

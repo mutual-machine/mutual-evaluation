@@ -41,8 +41,10 @@ def mass {A : Type} (p : PMF A) (a : A) : ℝ := (p a).toReal
 
 end Probability
 
-/-- Draw a shared input from `P`, then draw independently from the two
-kernel outputs at that input. -/
+/- AUTHOR-SPAN CO-06
+We `bind` the shared input distribution `P` through the two kernels to obtain
+their joint output distribution. We independently sample once from each kernel
+at the shared input and return the resulting pair of outcomes. -/
 def jointLaw {X A B : Type} (P : PMF X) (left : Kernel X A) (right : Kernel X B) :
     PMF (A × B) :=
   P.bind fun x => pair (left x) (right x)
@@ -55,7 +57,6 @@ point mass at the raw return. -/
 def Kernel.replicate {X R : Type} (k : Kernel X R) : Kernel X (R × R) :=
   fun x => pair (k x) (k x)
 
-/-- Return the input with probability one. -/
 @[simp]
 def Kernel.truth {R : Type} : Kernel R R := PMF.pure
 
@@ -66,16 +67,18 @@ A deviation replaces a kernel; garbling post-processes it. -/
 def deviate {I X R : Type} [DecidableEq I] (σ : I → Kernel X R) (i : I) (τ : Kernel X R) :=
   Function.update σ i τ
 
-/-- Apply the reporting kernel `τ` to each output drawn from `k`. -/
 def Kernel.garble {X R B : Type} (k : Kernel X R) (τ : Kernel R B) : Kernel X B :=
   fun x => (k x).bind τ
 
 def garble {I X R : Type} [DecidableEq I] (σ : I → Kernel X R) (i : I) (τ : Kernel R R) :=
   deviate σ i (Kernel.garble (σ i) τ)
 
-/-- Apply the specified garbling operation to `s` with kernel `τ`.
-Value must weakly decrease, with a strict decrease if the specified
-joint law goes from dependent to independent. -/
+/- AUTHOR-SPAN CO-07
+Given a state `s`, we may ask what happens if we apply a further garbling
+kernel `τ`. This produces a new state `t`.
+We say the value is robust under garbling if this operation weakly decreases
+the value. Moreover, if the specified joint law is dependent and becomes
+independent, the value must strictly decrease. -/
 def robustUnderGarbling {S R A B : Type} (value : S → ℝ) (joint : S → PMF (A × B))
     (postprocess : S → Kernel R R → S) (s : S) (τ : Kernel R R) : Prop :=
   let t := postprocess s τ
