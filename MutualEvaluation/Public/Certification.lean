@@ -77,12 +77,7 @@ theorem certification_of_view {A : Type} [Fintype A] {V : Type*}
     (hvalid : ∀ q : PMF A, sampleProbability q n (fun s => target q < L (view s)) ≤ δ)
     (p : PMF A) :
     sampleProbability p n (fun s => bound < L (view s)) ≤
-      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) := by
-  have prob_eq (q : PMF A) (E : (Fin n → A) → Prop) :
-      sampleProbability q n E = Collision.probability (fun a => (q a).toReal) E := by
-    unfold sampleProbability Collision.probability Collision.weight
-    congr!
-  simp_rw [prob_eq] at hvalid ⊢
-  exact Proofs.certification_pmf_bound n target bound (fun s => L (view s)) δ hbound hvalid p
+      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) :=
+  Proofs.certification_view_statement n target bound (fun s => L (view s)) δ hbound hvalid p
 
 end MutualEvaluation.Certification

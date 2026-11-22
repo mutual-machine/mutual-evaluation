@@ -164,8 +164,24 @@ theorem uniform_latent_dpi_statement {X Y : Type} [Fintype X] [Fintype Y]
   rw [uniform_diagonal_pmf]
   exact ⟨uniform_latent_pmf_bound f hf kx ky, rfl⟩
 
-/-- Adapt finite-product sums to the public event-probability spelling.
-No public definitions are redeclared here: this is only a proof-interface bridge. -/
+/-- Adapt finite-product sums to the public event-probability spelling. -/
+theorem certification_view_statement {A : Type} [Fintype A]
+    {m : ℕ} [NeZero m] (n : ℕ) (target : PMF A → ℝ) (bound : ℝ)
+    (L : (Fin n → A) → ℝ) (δ : ℝ)
+    (hbound : ∀ z : Fin m → A, target ((PMF.uniformOfFintype (Fin m)).map z) ≤ bound)
+    (hvalid : ∀ q : PMF A,
+      (∑ s : Fin n → A, (∏ j, (q (s j)).toReal) * (if target q < L s then 1 else 0)) ≤ δ)
+    (p : PMF A) :
+    (∑ s : Fin n → A, (∏ j, (p (s j)).toReal) * (if bound < L s then 1 else 0)) ≤
+      δ + (Nat.choose n 2 : ℝ) / (m : ℝ) := by
+  have prob_eq (q : PMF A) (E : (Fin n → A) → Prop) :
+      (∑ s : Fin n → A, (∏ j, (q (s j)).toReal) * (if E s then 1 else 0)) =
+        Collision.probability (mass q) E := by
+    unfold Collision.probability Collision.weight
+    congr!
+  simp_rw [prob_eq] at hvalid ⊢
+  exact certification_pmf_bound n target bound L δ hbound hvalid p
+
 theorem certification_statement {X Y : Type} [Fintype X] [Fintype Y]
     {m : ℕ} [NeZero m] (n : ℕ) (f : ℝ → ℝ) (hf : ConvexOn ℝ (Set.Ici 0) f)
     (L : (Fin n → X × Y) → ℝ) (δ : ℝ)
@@ -178,18 +194,11 @@ theorem certification_statement {X Y : Type} [Fintype X] [Fintype Y]
     (∑ s : Fin n → X × Y, (∏ j, (p (s j)).toReal) *
       (if f m / m + (1 - 1/(m:ℝ))*f 0 < L s then 1 else 0)) ≤
       δ + (Nat.choose n 2 : ℝ)/(m:ℝ) := by
-  have hv : ∀ q : PMF (X × Y), Collision.probability (mass q)
-      (fun s => divergence f (mass q)
-        (fun xy => mass (q.map Prod.fst) xy.1 * mass (q.map Prod.snd) xy.2) < L s) ≤ δ := by
-    intro q
-    have hh := hvalid q
-    simp only [Collision.probability, Collision.weight, divergence] at hh ⊢
-    convert hh using 1; congr!
-  have hh := certification_pmf_bound (m := m) n _ _ L δ (fun z => by
-    simpa only [empirical_pair] using
-      uniform_latent_pmf_bound f hf (fun i => PMF.pure (z i).1) (fun i => PMF.pure (z i).2)) hv p
-  simp only [Collision.probability, Collision.weight] at hh ⊢
-  convert hh using 1; congr!
+  refine certification_view_statement (m := m) n _ _ L δ ?_ hvalid p
+  intro z
+  have h := uniform_latent_pmf_bound f hf (fun i => PMF.pure (z i).1) (fun i => PMF.pure (z i).2)
+  simp only [empirical_pair, divergence] at h
+  convert h using 1
 
 end Certification.Proofs
 end MutualEvaluation
