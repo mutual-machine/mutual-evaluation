@@ -36,25 +36,8 @@ How are outcomes generated? The workers have a strategy profile `σ` that
 consists of two additional kernels that affect returns. Each `σ i` affects a raw
 return to a return belief. -/
 def law (σ : Fin 2 → Kernel R R) : PMF (TwoPairOutcome R) :=
-  G.P.bind fun x =>
-    let p := (G.w 0 x).bind (σ 0)
-    let q := (G.w 1 x).bind (σ 1)
-    pair (pair p p) (pair q q)
-
-/- AUTHOR-SPAN TP-05
-We `bind` the raw return through the strategy kernel to obtain the return
-beliefs, i.e. what workers believe they will return. We then independently sample
-twice from each belief and return an outcome. A truthful strategy returns a
-point mass at the raw return. -/
-def truth : Fin 2 → Kernel R R := fun _ => PMF.pure
-
-/- AUTHOR-SPAN TP-06
-A deviation replaces a kernel; garbling post-processes it. -/
-def deviate (σ : Fin 2 → Kernel R R) (i : Fin 2) (τ : Kernel R R) :=
-  Function.update σ i τ
-
-def garble (σ : Fin 2 → Kernel R R) (i : Fin 2) (τ : Kernel R R) :=
-  deviate σ i (fun a => (σ i a).bind τ)
+  let replicate i := Kernel.replicate (Kernel.garble (G.w i) (σ i))
+  jointLaw G.P (replicate 0) (replicate 1)
 
 /- AUTHOR-SPAN TP-07
 Given an outcome belief, we may calculate the critic envelope. -/
@@ -74,10 +57,7 @@ reporting kernel weakly decreases the envelope. Moreover, if the cross marginal
 is dependent and becomes independent, the envelope must strictly decrease. -/
 def robustAt (i : Fin 2) : Prop :=
   ∀ (σ : Fin 2 → Kernel R R) (τ : Kernel R R),
-    let ν := law G (garble σ i τ)
-    let ρ := law G σ
-    V G ν ≤ V G ρ ∧
-      (¬ independent (cross ρ) → independent (cross ν) → V G ν < V G ρ)
+    robustUnderGarbling (V G ∘ law G) (cross ∘ law G) (fun s => garble s i) σ τ
 
 /- AUTHOR-SPAN TP-10
 The original robustness condition concerns worker `0`. -/

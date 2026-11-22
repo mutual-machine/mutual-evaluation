@@ -41,5 +41,46 @@ def mass {A : Type} (p : PMF A) (a : A) : ℝ := (p a).toReal
 
 end Probability
 
+/-- Draw a shared input from `P`, then draw independently from the two
+kernel outputs at that input. -/
+def jointLaw {X A B : Type} (P : PMF X) (left : Kernel X A) (right : Kernel X B) :
+    PMF (A × B) :=
+  P.bind fun x => pair (left x) (right x)
+
+/- AUTHOR-SPAN TP-05
+We `bind` the raw return through the strategy kernel to obtain the return
+beliefs, i.e. what workers believe they will return. We then independently sample
+twice from each belief and return an outcome. A truthful strategy returns a
+point mass at the raw return. -/
+def Kernel.replicate {X R : Type} (k : Kernel X R) : Kernel X (R × R) :=
+  fun x => pair (k x) (k x)
+
+/-- Return the input with probability one. -/
+@[simp]
+def Kernel.truth {R : Type} : Kernel R R := PMF.pure
+
+def truth {I R : Type} : I → Kernel R R := fun _ => Kernel.truth
+
+/- AUTHOR-SPAN TP-06
+A deviation replaces a kernel; garbling post-processes it. -/
+def deviate {I X R : Type} [DecidableEq I] (σ : I → Kernel X R) (i : I) (τ : Kernel X R) :=
+  Function.update σ i τ
+
+/-- Apply the reporting kernel `τ` to each output drawn from `k`. -/
+def Kernel.garble {X R B : Type} (k : Kernel X R) (τ : Kernel R B) : Kernel X B :=
+  fun x => (k x).bind τ
+
+def garble {I X R : Type} [DecidableEq I] (σ : I → Kernel X R) (i : I) (τ : Kernel R R) :=
+  deviate σ i (Kernel.garble (σ i) τ)
+
+/-- Apply the specified garbling operation to `s` with kernel `τ`.
+Value must weakly decrease, with a strict decrease if the specified
+joint law goes from dependent to independent. -/
+def robustUnderGarbling {S R A B : Type} (value : S → ℝ) (joint : S → PMF (A × B))
+    (postprocess : S → Kernel R R → S) (s : S) (τ : Kernel R R) : Prop :=
+  let t := postprocess s τ
+  value t ≤ value s ∧
+    (¬ independent (joint s) → independent (joint t) → value t < value s)
+
 end MutualEvaluation
 end

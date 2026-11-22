@@ -14,11 +14,11 @@ PUBLIC = ROOT / "MutualEvaluation/Public"
 
 # Counts and audit routing are technical regression checks, not annotations.
 MODULES = {
-    "Core": (8, "Core"),
-    "TwoPairOutcome": (14, "TwoPairOutcome"),
+    "Core": (16, "Core"),
+    "TwoPairOutcome": (11, "TwoPairOutcome"),
     "Abstract": (13, "Abstract"),
     "CriticTiming": (24, "PublicTiming"),
-    "Replication": (70, "PublicReplication"),
+    "Replication": (72, "PublicReplication"),
     "Certification": (5, "PublicCertification"),
 }
 
@@ -268,7 +268,7 @@ def check():
     timing = selected["CriticTiming"]
     replication = selected["Replication"]
     assert sum(k == "theorem" for k, _, _ in timing) == 9
-    assert sum(k == "theorem" for k, _, _ in replication) == 34
+    assert sum(k == "theorem" for k, _, _ in replication) == 36
     annotation_counts = check_annotation_inventory()
     root_imports = re.findall(
         r"^import (\S+)$", (ROOT / "MutualEvaluation.lean").read_text(), re.M)

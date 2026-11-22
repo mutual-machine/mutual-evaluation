@@ -79,7 +79,7 @@ theorem same_value_robustness_iff (H : Game X R)
   have hl : law G = law H := by
     funext σ
     simp only [law, hP, hw]
-  simp only [robust, robustAt, hl, hV]
+  simp only [robust, robustAt, robustUnderGarbling, Function.comp_apply, hl, hV]
 
 theorem gap_iff_regret_invariant_on [Fintype R] {L : Type}
     (g : L → PMF (TwoPairOutcome R)) :

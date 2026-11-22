@@ -142,7 +142,8 @@ theorem regrets (c : Critic Bool) (ρ : PMF (TwoPairOutcome Bool)) :
 private theorem robust_of_envelope (G : Game X Bool)
     (hv : ∀ ρ, V G ρ = 1 + TV (cross ρ) / 2) : robust G := by
   intro σ τ
-  dsimp only [garble, deviate]
+  have hgarble : garble σ 0 τ = Function.update σ 0 (fun a => (σ 0 a).bind τ) := rfl
+  simp only [robustUnderGarbling, Function.comp_apply, hgarble]
   have hs : (fun i a => (σ i a).bind (Function.update truth 0 τ i)) =
       Function.update σ 0 (fun a => (σ 0 a).bind τ) := by
     funext i a

@@ -11,6 +11,14 @@ open MutualEvaluation
 #print Binary.scores
 #print Binary.Critic
 #print Probability.mass
+#print jointLaw
+#print Kernel.replicate
+#print Kernel.truth
+#print truth
+#print deviate
+#print Kernel.garble
+#print garble
+#print robustUnderGarbling
 
 #print axioms Kernel
 #print axioms pair
@@ -20,6 +28,14 @@ open MutualEvaluation
 #print axioms Binary.scores
 #print axioms Binary.Critic
 #print axioms Probability.mass
+#print axioms jointLaw
+#print axioms Kernel.replicate
+#print axioms Kernel.truth
+#print axioms truth
+#print axioms deviate
+#print axioms Kernel.garble
+#print axioms garble
+#print axioms robustUnderGarbling
 
 /-! Shared-only clients need no assumptions on the outcome type. -/
 noncomputable section

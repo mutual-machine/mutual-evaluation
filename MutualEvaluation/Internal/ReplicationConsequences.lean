@@ -54,6 +54,91 @@ theorem V_chiSquared_eq_impl : rp_Replication_V_chiSquared P k = rp_FiniteTask_p
 theorem V_KL_eq_impl : rp_Replication_V_KL P k = rp_FiniteTask_shannon P k :=
   (V_KL_eq_target P k).trans (ShannonTarget.value_eq P k)
 
+omit [MeasurableSpace R] [MeasurableSingletonClass R] in
+private theorem taskReport_independent_iff_posterior :
+    independent (jointLaw P PMF.pure k) ↔
+      ∀ a, 0 < rp_FiniteTask_reportMass P k a → rp_FiniteTask_posterior P k a = mass P := by
+  classical
+  let q := P.bind fun x => (k x).map fun a => (x, a)
+  have hq : jointLaw P PMF.pure k = q := by
+    simp only [jointLaw, pair, PMF.pure_bind, q]
+  have hfst : q.map Prod.fst = P := by
+    simp only [q, PMF.map_bind, PMF.map_comp]
+    change (P.bind fun x => (k x).map (Function.const R x)) = P
+    simp [PMF.map_const, PMF.bind_pure]
+  have hsnd : q.map Prod.snd = P.bind k := by
+    simp only [q, PMF.map_bind, PMF.map_comp]
+    change (P.bind fun x => (k x).map id) = P.bind k
+    simp [PMF.map_id]
+  have hjoint (x : X) (a : R) : mass q (x, a) = rp_FiniteTask_jointMass P k x a := by
+    change mass (P.bind fun y => (k y).bind fun b => PMF.pure (y, b)) (x, a) =
+      mass P x * mass (k x) a
+    simp [mass_bind, mass_pure, Prod.mk.injEq, ite_and]
+  have hi : independent q ↔ ∀ x a,
+      rp_FiniteTask_jointMass P k x a = mass P x * rp_FiniteTask_reportMass P k a := by
+    rw [independent_iff_mass, hfst, hsnd]
+    simp_rw [hjoint]
+  rw [hq, hi]
+  constructor
+  · intro h a ha
+    funext x
+    change rp_FiniteTask_jointMass P k x a / rp_FiniteTask_reportMass P k a = mass P x
+    rw [h x a, mul_div_cancel_right₀ _ (ne_of_gt ha)]
+  · intro h x a
+    by_cases ha : rp_FiniteTask_reportMass P k a = 0
+    · rw [jointMass_zero_of_reportMass_zero P k x a ha]
+      rw [ha, mul_zero]
+    · rw [← weighted_posterior, h a (lt_of_le_of_ne (reportMass_nonneg P k a) (Ne.symm ha))]
+      exact mul_comm _ _
+
+omit [Fintype X] [Fintype R] [MeasurableSpace R] [MeasurableSingletonClass R] in
+private theorem constant_annotation_posterior (b : Unit) :
+    rp_FiniteTask_posterior P (rp_FiniteTask_annotated k (fun _ : R => ())) b = mass P := by
+  cases b
+  funext x
+  have hchannel : rp_FiniteTask_annotated k (fun _ : R => ()) = fun _ => PMF.pure () := by
+    funext y
+    exact PMF.map_const _ _
+  rw [hchannel]
+  simp [mass, PMF.bind_const]
+
+omit [Fintype R] [MeasurableSpace R] [MeasurableSingletonClass R] in
+private theorem constant_annotation_information :
+    rp_FiniteTask_pearson P (rp_FiniteTask_annotated k (fun _ : R => ())) = 0 ∧
+      rp_FiniteTask_shannon P (rp_FiniteTask_annotated k (fun _ : R => ())) = 0 := by
+  constructor
+  · rw [pearson_eq_posterior]
+    apply Finset.sum_eq_zero
+    intro x _
+    rw [Fintype.sum_unique]
+    let k' : Kernel X Unit := rp_FiniteTask_annotated k (fun _ : R => ())
+    change rp_FiniteTask_reportMass P k' () *
+      (rp_FiniteTask_posterior P k' () x - mass P x)^2 / mass P x = 0
+    have hpost : rp_FiniteTask_posterior P k' () x = mass P x :=
+      congrFun (constant_annotation_posterior P k ()) x
+    rw [hpost]
+    simp
+  · rw [shannon_eq_posterior]
+    apply Finset.sum_eq_zero
+    intro b _
+    let k' : Kernel X Unit := rp_FiniteTask_annotated k (fun _ : R => ())
+    change rp_FiniteTask_reportMass P k' b *
+      rp_FiniteLog_divergence (rp_FiniteTask_posterior P k' b) (mass P) = 0
+    have hpost : rp_FiniteTask_posterior P k' b = mass P := constant_annotation_posterior P k b
+    rw [hpost, FiniteLog.divergence_self, mul_zero]
+
+theorem V_chiSquared_zero_iff_independent_impl :
+    rp_Replication_V_chiSquared P k = 0 ↔
+      independent (jointLaw P PMF.pure k) := by
+  rw [V_chiSquared_eq_impl, ← (constant_annotation_information P k).1, pearson_annotation_eq_iff]
+  simpa only [constant_annotation_posterior] using (taskReport_independent_iff_posterior P k).symm
+
+theorem V_KL_zero_iff_independent_impl :
+    rp_Replication_V_KL P k = 0 ↔
+      independent (jointLaw P PMF.pure k) := by
+  rw [V_KL_eq_impl, ← (constant_annotation_information P k).2, shannon_annotation_eq_iff]
+  simpa only [constant_annotation_posterior] using (taskReport_independent_iff_posterior P k).symm
+
 theorem u_chiSquared_literal :
     rp_Replication_u_chiSquared (rp_Binary_annotate id) P k = rp_FiniteTask_pearson P k :=
   (u_chiSquared_eq_target _ P k).trans (PearsonTarget.literal_payoff P k)
@@ -175,6 +260,28 @@ theorem V_KL_data_processing_impl {B : Type} [Fintype B]
     rp_Replication_V_KL P (fun x => (k x).bind τ) ≤ rp_Replication_V_KL P k := by
   rw [MutualEvaluation.Replication.V_KL_eq_impl, MutualEvaluation.Replication.V_KL_eq_impl]
   exact shannon_data_processing P k τ
+
+theorem V_chiSquared_robust_impl (τ : Kernel R R) :
+    robustUnderGarbling (rp_Replication_V_chiSquared P) (jointLaw P Kernel.truth)
+      Kernel.garble k τ := by
+  refine ⟨V_chiSquared_data_processing_impl P k τ, fun hbefore hafter => ?_⟩
+  have hnonneg : 0 ≤ rp_Replication_V_chiSquared P k := by
+    rw [V_chiSquared_eq_impl]
+    exact pearson_nonneg P k
+  exact ((V_chiSquared_zero_iff_independent_impl P (k.garble τ)).2 hafter).trans_lt <|
+    lt_of_le_of_ne hnonneg fun hzero =>
+      hbefore ((V_chiSquared_zero_iff_independent_impl P k).1 hzero.symm)
+
+theorem V_KL_robust_impl (τ : Kernel R R) :
+    robustUnderGarbling (rp_Replication_V_KL P) (jointLaw P Kernel.truth)
+      Kernel.garble k τ := by
+  refine ⟨V_KL_data_processing_impl P k τ, fun hbefore hafter => ?_⟩
+  have hnonneg : 0 ≤ rp_Replication_V_KL P k := by
+    rw [V_KL_eq_impl]
+    exact shannon_nonneg P k
+  exact ((V_KL_zero_iff_independent_impl P (k.garble τ)).2 hafter).trans_lt <|
+    lt_of_le_of_ne hnonneg fun hzero =>
+      hbefore ((V_KL_zero_iff_independent_impl P k).1 hzero.symm)
 
 /-- Any truthful-channel optimizer bounds every simultaneous change of critic
 and fixed reporting kernel, for the original Pearson loop score. -/

@@ -84,7 +84,7 @@ theorem pair_bind {A B C D : Type} (p : PMF A) (q : PMF B)
 theorem cross_law {X R : Type} (G : Game X R) (σ : Fin 2 → Kernel R R) :
     cross (law G σ) =
       G.P.bind fun x => pair ((G.w 0 x).bind (σ 0)) ((G.w 1 x).bind (σ 1)) := by
-  simp only [cross, law, pair, PMF.map, Function.comp_def,
+  simp only [cross, law, jointLaw, Kernel.replicate, Kernel.garble, pair, PMF.map, Function.comp_def,
     PMF.bind_bind, PMF.pure_bind, PMF.bind_const]
 
 /-- Both local reporting compositions, with no finite-alphabet hypothesis. -/
@@ -104,7 +104,7 @@ theorem cross_law_post {X R : Type} (G : Game X R)
 theorem self_law {X R : Type} (G : Game X R) (σ : Fin 2 → Kernel R R) :
     (law G σ).map Prod.fst =
       G.P.bind fun x => pair ((G.w 0 x).bind (σ 0)) ((G.w 0 x).bind (σ 0)) := by
-  simp only [law, pair, PMF.map, Function.comp_def,
+  simp only [law, jointLaw, Kernel.replicate, Kernel.garble, pair, PMF.map, Function.comp_def,
     PMF.bind_bind, PMF.pure_bind, PMF.bind_const]
 
 end MutualEvaluation.Probability

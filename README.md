@@ -17,11 +17,11 @@ their author annotations.** Theorems include proofs checked by Lean.
 
 | Module | Material | Declarations |
 |---|---|---:|
-| [Core](MutualEvaluation/Public/Core.lean) | Shared kernels, scores, independence, binary critics, and probability mass | 8 |
-| [TwoPairOutcome](MutualEvaluation/Public/TwoPairOutcome.lean) | Paper game, sampling, robustness, and equilibrium | 14 |
+| [Core](MutualEvaluation/Public/Core.lean) | Shared kernels, reporting strategies, joint laws, scores, independence, robustness, binary critics, and probability mass | 16 |
+| [TwoPairOutcome](MutualEvaluation/Public/TwoPairOutcome.lean) | Paper game, sampling, robustness, and equilibrium | 11 |
 | [Abstract](MutualEvaluation/Public/Abstract.lean) | Value envelopes, regret, separability, and committed loss | 13 |
 | [CriticTiming](MutualEvaluation/Public/CriticTiming.lean) | CA/VPP timing, conditional transfer, Boolean objective, and example | 24 |
-| [Replication](MutualEvaluation/Public/Replication.lean) | Validity, Pearson/KL replication payments, information, regret, and single-worker equilibrium | 70 |
+| [Replication](MutualEvaluation/Public/Replication.lean) | Validity, Pearson/KL replication payments, information, robustness, regret, and single-worker equilibrium | 72 |
 | [Certification](MutualEvaluation/Public/Certification.lean) | Uniform-diagonal semantics and distribution-free confidence bound | 5 |
 
 Import all six modules with:
@@ -42,19 +42,19 @@ has paper proof dependencies; this separation concerns shared prerequisites.
 ## Annotation inventory
 
 The source markers identify 64 author annotation passages. These are counted
-separately from the 134 declarations and from unmarked documentation; a passage
+separately from the 141 declarations and from unmarked documentation; a passage
 may describe several declarations. Zero marked passages does not mean a module
 has no explanatory prose or that its prose has no author.
 
 | Module | Marked author passages | Unmarked block comments | Unmarked doc comments | Module comments |
 |---|---:|---:|---:|---:|
-| Core | 5 | 0 | 0 | 0 |
-| TwoPairOutcome | 14 | 0 | 0 | 0 |
+| Core | 7 | 0 | 4 | 0 |
+| TwoPairOutcome | 12 | 0 | 0 | 0 |
 | Abstract | 10 | 0 | 0 | 2 |
 | CriticTiming | 16 | 1 | 0 | 4 |
 | Replication | 14 | 28 | 0 | 1 |
 | Certification | 5 | 0 | 0 | 1 |
-| Total | 64 | 29 | 0 | 8 |
+| Total | 64 | 29 | 4 | 8 |
 
 [scripts/annotation_inventory.json](scripts/annotation_inventory.json) uses a
 lightweight format inspired by the [W3C Web Annotation Data Model](https://www.w3.org/TR/annotation-model/).
@@ -64,7 +64,8 @@ unmarked comment counts, and `annotations` records with four distinct parts:
 - `id`: the stable passage ID. The 30 existing `AUTHOR-PROSE-01`–`16` and
   `RP-01`–`14` IDs and Certification’s `CF-01`–`05` are retained.
   Newly confirmed passages use `CO-01`–`05` (Core), `TP-01`–`14`
-  (TwoPairOutcome), and `AB-01`–`08`, `AB-11`–`12` (Abstract).
+  (TwoPairOutcome, with `TP-05` and `TP-06` now in Core), and `AB-01`–`08`,
+  `AB-11`–`12` (Abstract).
 - `creator`: Zachary Robertson (`https://github.com/zrobertson466920`), credited
   separately based on his authorship statement for the 64 marked passages.
 - `body`: a `SpecificResource` selecting the existing prose in its Lean file,
@@ -144,6 +145,11 @@ its interpretation require author review.
 ## Scope
 
 Consult the Public declarations and their annotations for exact hypotheses.
+
+Core's `jointLaw` draws from two kernels given a shared input. TwoPairOutcome
+uses it for the outcome law. Core's `robustUnderGarbling` compares values before
+and after a specified garbling. TwoPairOutcome uses the cross-worker marginal.
+Replication uses the task–report law and garblings within the report alphabet.
 
 TwoPairOutcome's `robust` and `Model.robustness` concern additional garbling of **worker 0
 only**, independently on that worker's replicas. `robustBoth` requires robustness

@@ -53,7 +53,10 @@ theorem first_reporter_best_response [Fintype R] (h : robust G)
     G.u c (law G (Function.update σ 0 τ)) ≤
       G.u c (law G (Function.update σ 0 PMF.pure)) := by
   apply transfer_le G c c _ _ hc
-  simpa [garble, deviate, PMF.pure_bind] using (h (Function.update σ 0 PMF.pure) τ).1
+  have hτ : Kernel.garble (PMF.pure : Kernel R R) τ = τ := by
+    funext a
+    exact PMF.pure_bind a τ
+  simpa [garble, deviate, hτ] using (h (Function.update σ 0 PMF.pure) τ).1
 
 /-- The displayed second-worker bound is additional; it does not follow
 from robustness. No finite type hypothesis is needed for this value comparison. -/
@@ -65,8 +68,9 @@ theorem truth_value_maximal_of_robustness (h : robust G)
   have hs : Function.update s 0 (fun a => (s 0 a).bind (σ 0)) = σ := by
     funext i
     fin_cases i <;> simp [s, truth, PMF.pure_bind]
-  have hv := (h s (σ 0)).1
-  rw [garble, deviate, hs] at hv
+  have hv : V G (law G (Function.update s 0 (fun a => (s 0 a).bind (σ 0)))) ≤ V G (law G s) :=
+    (h s (σ 0)).1
+  rw [hs] at hv
   exact hv.trans (h₂ (σ 1))
 
 theorem truthful_nash_of_value_maximal [Fintype R] (h : truthValueMaximal G)

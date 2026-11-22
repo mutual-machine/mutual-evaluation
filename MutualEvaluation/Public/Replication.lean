@@ -982,3 +982,19 @@ theorem kl_bijective_annotation {B : Type} [Fintype B]
 end MutualEvaluation.Replication.Example
 end
 
+namespace MutualEvaluation.Replication
+
+section
+variable {X R : Type} [Fintype X] [Fintype R] [MeasurableSpace R] [MeasurableSingletonClass R]
+
+theorem V_chiSquared_robust (P : PMF X) (k : Kernel X R) (τ : Kernel R R) :
+    robustUnderGarbling (V_chiSquared P) (jointLaw P Kernel.truth) Kernel.garble k τ :=
+  V_chiSquared_robust_impl P k τ
+
+theorem V_KL_robust (P : PMF X) (k : Kernel X R) (τ : Kernel R R) :
+    robustUnderGarbling (V_KL P) (jointLaw P Kernel.truth) Kernel.garble k τ :=
+  V_KL_robust_impl P k τ
+
+end
+end MutualEvaluation.Replication
+

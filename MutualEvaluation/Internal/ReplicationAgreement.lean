@@ -136,7 +136,7 @@ theorem u_chiSquared_core_law (G : Game X R)
   have hp : (law G σ).map Prod.fst =
       G.P.bind fun x =>
         pair ((G.w 0 x).bind (σ 0)) ((G.w 0 x).bind (σ 0)) := by
-    simp only [law, pair, PMF.map, Function.comp_def, PMF.bind_bind,
+    simp only [law, jointLaw, Kernel.replicate, Kernel.garble, pair, PMF.map, Function.comp_def, PMF.bind_bind,
       PMF.pure_bind, PMF.bind_const]
   rw [hp, u_chiSquared_pair_law]
 

@@ -149,6 +149,8 @@ Computational annotation closure is checked by scripts/check_interface.py.
 #print axioms MutualEvaluation.Replication.Example.kl_regret_table
 #print axioms MutualEvaluation.Replication.Example.chiSquared_bijective_annotation
 #print axioms MutualEvaluation.Replication.Example.kl_bijective_annotation
+#print axioms MutualEvaluation.Replication.V_chiSquared_robust
+#print axioms MutualEvaluation.Replication.V_KL_robust
 
 /-! Type-name compatibility and unchanged tuple behavior; technical tests only. -/
 section

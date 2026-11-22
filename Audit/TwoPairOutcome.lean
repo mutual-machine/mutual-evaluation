@@ -7,9 +7,6 @@ open MutualEvaluation
 #print Game
 #print Game.toScore
 #print law
-#print truth
-#print deviate
-#print garble
 #print V
 #print cross
 #print robustAt
@@ -22,9 +19,6 @@ open MutualEvaluation
 #print axioms Game
 #print axioms Game.toScore
 #print axioms law
-#print axioms truth
-#print axioms deviate
-#print axioms garble
 #print axioms V
 #print axioms cross
 #print axioms robustAt
